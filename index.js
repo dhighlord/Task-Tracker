@@ -27,4 +27,26 @@ switch (cmd) {
         console.log(`Task added successfully (ID: ${newTask.id})`);
         break;
     }
+
+    case 'list': {
+        const filterStatus = argv[1];
+        let toShow = tasks;
+
+        if (filterStatus) {
+            if (!['todo', 'in-progress', 'done'].includes(filterStatus)) {
+                console.error('Invalid status. Use: todo. in-progress, done');
+                process.exit(1);
+            }
+            toShow = tasks.filter(t => t.status === filterStatus);
+        }
+
+        if (toShow.length === 0) {
+            console.log('No tasks found.');
+        } else {
+            toShow.forEach(t =>
+                console.log(`${t.id}: [${t.status}] ${t.description} (Created: ${t.createdAt})`)
+            );
+        }
+        break;
+    }
 }
