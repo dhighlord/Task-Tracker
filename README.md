@@ -19,12 +19,13 @@ It lets you add, update, delete, and list tasks directly from your terminal — 
 - **Data storage:** JSON file (tasks.json)
 
 ### PROJECT STRUCTURE
-
+```
 task-tracker/
 ├── index.js -> main CLI entry point
 ├── task.js -> handles file read/write and helper functions
 ├── tasks.json -> stores all tasks (auto-created)
 └── README.md
+```
 
 ### INSTALLATION
 1. Clone the repository.
