@@ -47,6 +47,103 @@ switch (cmd) {
                 console.log(`${t.id}: [${t.status}] ${t.description} (Created: ${t.createdAt})`)
             );
         }
+        
         break;
     }
+
+    case 'update': {
+        const id = parseInt(argv[1], 10);
+        const newDesc = argv[2];
+
+        if (!id || !newDesc) {
+            console.error('Usage: task-tracker update <id> "New description"');
+            process.exit(1);
+        }
+
+        const task = tasks.find(t => t.id === id);
+
+        if (!task) {
+            console.error(`Task with ID ${id} not found.`);
+            process.exit(1);
+        }
+
+        task.description = newDesc;
+        task.updateAt = new Date().toISOString();
+
+        saveTasks(tasks);
+        console.log(`Task ${id} updated.`);
+
+        break;
+    }
+
+    case 'delete': {
+        const id = parseInt(argv[1], 10);
+        
+        if (!id) {
+            console.error('Usage: task-tracker delete <id>');
+            process.exit(1);
+        }
+
+        const index = tasks.findIndex(t => t.id === id);
+
+        if (index < 0) {
+            console.error(`Task with ID ${id} not found.`);
+            process.exit(1);
+        }
+
+        tasks.splice(index, 1);
+        saveTasks(tasks);
+        console.log(`Task ${id} deleted.`);
+        break;
+    }
+
+    case 'mark-in-progress': {
+        const id = parseInt(argv[1], 10);
+
+        if (!id) {
+            console.error('Usage: task-tracker mark-in-progress <id>');
+            process.exit(1);
+        }
+
+        const task = tasks.find(t => t.id === id);
+
+        if (!task) {
+            console.error(`Task with ID ${id} not found.`);
+            process.exit(1);
+        }
+
+        task.status = 'in-progress';
+        task.updateAt = new Date().toISOString();
+        saveTasks(tasks);
+        console.log(`Task ${id} marked in-progress.`);
+        break;
+    }
+
+    case 'mark-done': {
+        const id = parseInt(argv[1], 10);
+
+        if (!id) {
+            console.error('Usage: task-tracker mark-done <id>');
+            process.exit(1);
+        }
+
+        const task = tasks.find(t => t.id == id);
+
+        if (!task) {
+            console.error(`Task with ID ${id} not found.`);
+            process.exit(1);
+        }
+
+        task.status = 'done';
+        task.updateAt = new Date().toISOString();
+        saveTasks(tasks);
+        console.log(`Task ${id} marked done.`);
+        
+        break;
+    }
+
+    default:
+        console.log('Usage: task-tracker <command> [option]');
+        console.log('Commands: add | list [status] | update <id> "desc" | delete <id> | mark-in-progress <id> | mark-done <id>');
+        break;
 }
